@@ -1,12 +1,14 @@
 <?php
 
-
-use App\Models\User;
-use App\Models\Post; 
 //menghubungkan ke Post.php di models
 use App\Models\Category;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\DashboardPostController;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
+
 //menghubungkan ke PostController
 
 
@@ -22,8 +24,8 @@ Route::get('/about', function () {
     return view('about', [
         "title" => "About",
         "active" => "about",
-        "name" => "Yella Ariska Safitri",
-        "email" => "yellaariska@gmail.com",
+        "name" => "Lumine de Estella",
+        "email" => "lumine@gmail.com",
         "image" => "pic1.png"
     ]);
 });
@@ -43,22 +45,39 @@ Route::get('categories', function(){
     ]);
 });
 
-Route::get('/categories/{category:slug}', function(Category $category) //menangkap slug dalam categories (di folder database\migration), membuat kelas kategori dengan route model binding
-{
-    return view('posts', [ //mengarahkan ke view posts
-        'title' => "Post by Category : $category->name", //mengindikasikan relasi
-        'active' => 'categories',
-        'posts' => $category->posts->load(['category', 'author']), 
-        //relasi 1 kategori memiliki banyak post
-    ]);
-});
+// Route::get('/categories/{category:slug}', function(Category $category) //menangkap slug dalam categories (di folder database\migration), membuat kelas kategori dengan route model binding
+// {
+//     return view('posts', [ //mengarahkan ke view posts
+//         'title' => "Post by Category : $category->name", //mengindikasikan relasi
+//         'active' => 'categories',
+//         'posts' => $category->posts->load(['category', 'author']), 
+//         //relasi 1 kategori memiliki banyak post
+//     ]);
+// });
 
-Route::get('/authors/{author:username}', function(User $author) //{user:username} agar link yang ditampilkan tidak lagi menggunakan id tapi menggunakan username penulis
-{
-    return view('posts', [
-        'title' => "Post by Author : $author->name",
-        'posts' => $author->posts->load('category', 'author'),
-        //load([]) untuk melakukan lazy eager loading
-        'active' => 'authors',
-    ]);
-});
+// Route::get('/authors/{author:username}', function(User $author) //{user:username} agar link yang ditampilkan tidak lagi menggunakan id tapi menggunakan username penulis
+// {
+//     return view('posts', [
+//         'title' => "Post by Author : $author->name",
+//         'posts' => $author->posts->load('category', 'author'),
+//         //load([]) untuk melakukan lazy eager loading
+//         'active' => 'authors',
+//     ]);
+// });
+
+// 2 route tidak terpakai karena sudah menggunakan query yang terdapat di model
+
+Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest'); // agar yang bisa mengakses adalah user yang belum terauthentikasi
+Route::post('/login', [LoginController::class, 'authenticate']);
+Route::post('/logout', [LoginController::class, 'logout']);
+
+Route::get('/register', [RegisterController::class, 'index'])->middleware('guest');
+Route::post('/register', [RegisterController::class, 'store']);
+// misal ada req ke halaman register dengan method post maka panggil RegisterController yg methodnya store
+
+Route::get('/dashboard', function() {
+    return view('dashboard.index');
+})->middleware('auth');
+
+Route::resource('/dashboard/posts', DashboardPostController::class)->middleware('auth');
+// controller untuk mengatur CRUD

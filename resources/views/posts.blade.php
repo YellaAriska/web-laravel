@@ -14,7 +14,7 @@
                 <input type="hidden" name="author" value="{{ request('author')}}">
                 @endif
                 <input type="text" class="form-control" placeholder="Search.." name="search" value="{{ request('search') }}">
-                <button class="btn btn-danger" type="submit">Search</button>
+                <button class="btn" style="background-color: #c5aded; color: #290d44" type="submit">Search</button>
               </div>
         </form>
     </div>
@@ -68,5 +68,10 @@
     {{-- jika postingan = 0 --}}
     <p class="text-center fs-4">No post found.</p> {{-- fs = font size --}}
 @endif
+
+<div class="d-flex justify-content-center">
+    {{ $posts->links() }} 
+    {{-- link untuk pindah halaman --}}
+</div>
 
 @endsection

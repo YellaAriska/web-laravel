@@ -53,4 +53,9 @@ class Post extends Model
     {
         return $this->belongsTo(User::class, 'user_id'); //karena di create_posts masih menggunakan user_id maka harus menambah user_id agar menjadi nama alias dari author, dengan ini harus mengganti juga di posts.blade dari user manjadi author
     }
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 }
