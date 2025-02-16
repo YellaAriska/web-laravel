@@ -18,9 +18,10 @@ class LoginController extends Controller
     public function authenticate(Request $request)
     {
         $credentials = $request->validate([
-            'email' => 'required|email:dns',
+            'email' => 'required|email',
             'password' => 'required'
         ]);
+        // email:dns agar format email yang dimasukkan sesuai, jika diganti hanya dengan email maka penjagaannya akan diturunkan sehingga dpt memasukkan email dg format lain
 
         if(Auth::attempt($credentials)) {
             $request->session()->regenerate();

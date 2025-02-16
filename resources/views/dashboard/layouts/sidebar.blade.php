@@ -14,7 +14,7 @@
               {{-- kelas request, jika ada request yang urlnya halaman dashboard maka tampilkan kelas active kalau tidak maka kosongkan --}}
             </li>
             <li class="nav-item">
-              <a class="nav-link {{ Request::is('dashboard/posts') ? 'active' : '' }} d-flex align-items-center gap-2" href="/dashboard/posts">
+              <a class="nav-link {{ Request::is('dashboard/posts*') ? 'active' : '' }} d-flex align-items-center gap-2" href="/dashboard/posts">
                 <svg class="bi"><use xlink:href="#file-earmark-text"/></svg>
                 My Posts
               </a>

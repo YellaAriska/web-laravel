@@ -79,5 +79,10 @@ Route::get('/dashboard', function() {
     return view('dashboard.index');
 })->middleware('auth');
 
+Route::get('/dashboard/posts/checkSlug', [DashboardPostController::class, 'checkSlug'])->middleware('auth');
+// ketika ada request dg method get ke url /dashboard/posts/checkSlug maka akan memanggil DashboardPostController dg method checkSlug
+
 Route::resource('/dashboard/posts', DashboardPostController::class)->middleware('auth');
 // controller untuk mengatur CRUD
+// hanya dengan mengarahkan ke dashboard/posts dan menambahkan method akan otomatis ditangani oleh controller
+// jika menggunakan method get akan ke index, jika post akan ke store, jika put akan ke update, jika delete akan ke destroy
