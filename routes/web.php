@@ -1,6 +1,8 @@
 <?php
 
 //menghubungkan ke Post.php di models
+
+use App\Http\Controllers\AdminCategoryController;
 use App\Models\Category;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
@@ -86,3 +88,8 @@ Route::resource('/dashboard/posts', DashboardPostController::class)->middleware(
 // controller untuk mengatur CRUD
 // hanya dengan mengarahkan ke dashboard/posts dan menambahkan method akan otomatis ditangani oleh controller
 // jika menggunakan method get akan ke index, jika post akan ke store, jika put akan ke update, jika delete akan ke destroy
+
+Route::resource('/dashboard/categories', AdminCategoryController::class)->except('show')->middleware('admin');
+// fungsi except agar show tidak dapat diakses
+
+// Route::resource('/dashboard/categories', AdminCategoryController::class)->except('show');

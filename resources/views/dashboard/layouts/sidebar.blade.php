@@ -8,7 +8,7 @@
           <ul class="nav flex-column">
             <li class="nav-item">
               <a class="nav-link {{ Request::is('dashboard') ? 'active' : '' }} d-flex align-items-center gap-2" href="/dashboard">
-                <svg class="bi"><use xlink:href="#house-fill"/></svg>
+                <svg class="bi"><use xlink:href="#house-door"/></svg>
                 Dashboard
               </a>
               {{-- kelas request, jika ada request yang urlnya halaman dashboard maka tampilkan kelas active kalau tidak maka kosongkan --}}
@@ -22,5 +22,25 @@
             </li>
           </ul>
         </div>
+
+        @can('admin')
+        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+          <span>ADMINISTRATOR</span>
+        </h6>
+        <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link {{ Request::is('dashboard/categories*') ? 'active' : '' }} d-flex align-items-center gap-2" href="/dashboard/categories">
+                <svg class="bi"><use xlink:href="#grid"/></svg>
+                Post Categories
+              </a>
+              {{-- kelas request, jika ada request yang urlnya halaman dashboard maka tampilkan kelas active kalau tidak maka kosongkan --}}
+
+              {{-- dimasukkan @can agar hanya menampilkan view ini untuk admin saja menggunakan gate yang diatur di AppServiceProvider --}}
+            </li>
+          </ul>
+        </div>
+        @endcan
+
       </div>
     </div>

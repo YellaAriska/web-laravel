@@ -9,6 +9,7 @@ use Illuminate\Contracts\Support\ValidatedData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Symfony\Contracts\Service\Attribute\Required;
+use Illuminate\Support\Facades\Storage;
 
 class DashboardPostController extends Controller
 {
@@ -88,6 +89,7 @@ class DashboardPostController extends Controller
         $rules = [
             'title' => 'required|max:255',
             'category_id' => 'required',
+            'image' => 'image|file|max:2048',
             'body' => 'required'
         ];
 
@@ -97,6 +99,15 @@ class DashboardPostController extends Controller
         // slug dikeluarkan dari rules dan dimasukkan ke dalam if agar jika slug post lama tetap sama maka tidak terdeteksi slug duplicate
 
         $validatedData = $request->validate($rules);
+
+        if ($request->file('image')) {
+            if ($request->oldImage) {
+                Storage::delete($request->oldImage);
+            }
+            // agar gambar lama yg di request dari edit.blade dihapus sebelum digantikan dg gambar yang baru
+            
+            $validatedData['image'] = $request->file('image')->store('post-images');
+        }
 
         $validatedData['user_id'] = auth()->user()->id;
         $validatedData['excerpt'] = Str::limit(strip_tags(str_replace("&nbsp;"," ",$request->body)), 200);
@@ -112,6 +123,10 @@ class DashboardPostController extends Controller
      */
     public function destroy(Post $post)
     {
+        if ($post->image) {
+            Storage::delete($post->image);
+        }
+        
         Post::destroy($post->id);
 
         return redirect('/dashboard/posts')->with('success', 'Post has been deleted!');
